@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/coffee"
+        android:icon="@drawable/coffee_icon"
+        android:title="COFFEE"
+       />
+
+    <item android:id="@+id/machine"
+        android:icon="@drawable/machine_icon"
+        android:title="MACHINE"
+        />
+    <item android:id="@+id/reglages"
+        android:icon="@drawable/user_icon"
+        android:title="REGLAGES"
+        />
+
+
+</menu>

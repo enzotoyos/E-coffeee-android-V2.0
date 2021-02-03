@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "721912164827",
+    "firebase_url": "https://e-coffee-e2dd2.firebaseio.com",
+    "project_id": "e-coffee-e2dd2",
+    "storage_bucket": "e-coffee-e2dd2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721912164827:android:80f14f03ef41960b3437fe",
+        "android_client_info": {
+          "package_name": "com.sndoc.e_coffeee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721912164827-iqdfc1djopr82n9n4m3cbtbktlg1vqsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4rlPkw3v0g5K8Wtga9QHeC9_ttFc0Amk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721912164827-iqdfc1djopr82n9n4m3cbtbktlg1vqsk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "721912164827-u84btrbv7elib4pkj1ml1t0vof0u1qmv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.enzotoyos.E-COFFEE"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

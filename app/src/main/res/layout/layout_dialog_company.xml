@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/Email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="E-mail"
+        android:inputType="textEmailAddress"/>
+
+    <EditText
+        android:id="@+id/Password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mot de passe"
+        android:inputType="textPassword"
+        android:layout_below="@+id/Email"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:id="@+id/Company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nouvelle entreprise"
+        android:layout_below="@+id/Password"
+        android:layout_alignParentStart="true"/>
+
+</RelativeLayout>
