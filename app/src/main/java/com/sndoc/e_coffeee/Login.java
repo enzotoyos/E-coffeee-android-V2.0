@@ -45,12 +45,13 @@ public class Login extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
+        //attribution des composants graphiques
         mEmail = findViewById(R.id.Email);
         mPassword = findViewById(R.id.password);
         mLoginBtn = findViewById(R.id.loginBtn);
@@ -59,9 +60,10 @@ public class Login extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance();
 
-
-        if(fAuth.getCurrentUser() != null){  //Si l'utilisateur est déjà connecté on le renvoie sur l'ecran d'accueil
+        //Si l'utilisateur est déjà connecté on le renvoie sur l'ecran d'accueil
+        if(fAuth.getCurrentUser() != null){
             boolean emailVerified = user.isEmailVerified();
+            // test si l'utilisateur a verifier son mail après l'inscription
             if(emailVerified == true){
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }else{
@@ -69,11 +71,12 @@ public class Login extends AppCompatActivity {
             }
         }
 
+        // si l'utilisateur perd son mot de passe
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.println("bouton forget password appuye");
-                afficherPopup();
+                afficherPopupResetPassword();
 
             }
         });
@@ -103,14 +106,13 @@ public class Login extends AppCompatActivity {
                     }
                }
 
-                // Authentification du user
-
+                // Authentification du user avec email est password
                 fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         boolean emailVerified = user.isEmailVerified();
                         if(task.isSuccessful()) {
-                            if(emailVerified == true){
+                            if(emailVerified == true){ // on revérifie si l'utilisateur à bien vérifier son email
                                 Toast.makeText(Login.this, "Bienvenue", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
@@ -135,39 +137,51 @@ public class Login extends AppCompatActivity {
 
     }
 
-    void afficherPopup(){
+    // fonction affiche la pop-up pour la réinitalisation du MDP
+    void afficherPopupResetPassword(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmation");
         builder.setMessage("Merci de renseigner votre adresse mail");
-
 
         final EditText input = new EditText(this);
 
         builder.setView(input);
 
+        //instruction une fois le bouton ok appuyé
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(final DialogInterface dialog, int which) {
+
                 email = input.getText().toString();
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                auth.sendPasswordResetEmail(email)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    System.out.println("email de réinitailisation envoyé");
+
+                //Obligatoire car si la méthode reçoit un paramètre vide l'appli crash
+                if(email.isEmpty()){
+                    input.setError("le champ est vide");
+                }else {
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                    String emailAddress = email;
+
+                    //utilisation de la methode de L'API Firebase
+                    auth.sendPasswordResetEmail(emailAddress)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        System.out.println("Email sent.");
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
             }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            //instruction si le bouton cancel appuyé
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-
         builder.show();
-    }
-}
+    }// END: fonction afficherPopupReset
+
+
+}// END: class login
