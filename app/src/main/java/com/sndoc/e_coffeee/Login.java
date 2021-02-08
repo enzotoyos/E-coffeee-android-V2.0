@@ -39,11 +39,13 @@ import com.google.firebase.auth.FirebaseUser;
 public class Login extends AppCompatActivity {
 
     private String email = "";
+    private String password = "";
     EditText mEmail,mPassword;
     TextView forgetPassword;
     Button mLoginBtn,mSignupBtn;
     FirebaseAuth fAuth;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    boolean emailVerified;
 
 
     @Override
@@ -86,8 +88,8 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
+                email = mEmail.getText().toString().trim();
+                password = mPassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)){ // vérifie que le champ email est remplie
                     mEmail.setError("email vide");
@@ -100,28 +102,10 @@ public class Login extends AppCompatActivity {
                 if(password.length() < 6) {  // vérifie que le password contient plus de 6 caracteres
                     mPassword.setError("le mot de passe doit contenir au minimum 6 caracteres");
 
-                    if(fAuth.getCurrentUser() != null){
-                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                       finish();
-                    }
                }
 
                 // Authentification du user avec email est password
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        boolean emailVerified = user.isEmailVerified();
-                        if(task.isSuccessful()) {
-                            if(emailVerified == true){ // on revérifie si l'utilisateur à bien vérifier son email
-                                Toast.makeText(Login.this, "Bienvenue", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            }
-                        }else {
-                            Toast.makeText(Login.this, "Mot de passe ou E-mail incorrect"+ task.getException() .getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
+                loginUser();
 
             }
         });
@@ -182,6 +166,39 @@ public class Login extends AppCompatActivity {
         });
         builder.show();
     }// END: fonction afficherPopupReset
+
+
+    public void loginUser(){
+        fAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        recupererInfosUser();
+                        if (task.isSuccessful()) {
+                            if(emailVerified == true){
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                 System.out.println("Bienvenue");
+                            }else{
+                                System.out.println("vous n'avez pas vérifier votre email");
+                            }
+                        }else {
+                            // If sign in fails, display a message to the user.
+                            System.out.println("signInWithEmail:failure"+ task.getException());
+                            Toast.makeText(Login.this, "Authentication échoué.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void recupererInfosUser(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+             emailVerified = user.isEmailVerified();
+        }
+
+    }
+
 
 
 }// END: class login
